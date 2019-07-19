@@ -1,76 +1,149 @@
 package com.digitalsingular.todo.model.list;
 
-import static org.hamcrest.CoreMatchers.hasItem;
-import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.fail;
 
+import java.util.List;
+
+import static org.hamcrest.Matchers.empty;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import com.digitalsingular.todo.model.item.TodoItem;
 
 public class TodoListTests {
+	
+	private TodoList sut = null;
+	
+	@Before
+	public void setUp() {
+		sut = new TodoList();
+	}
 
 	@Test
-	public void givenANewListShouldContainNoPendingItems() {
-		//Act
-		TodoList list = new TodoList();
-		//Assert
-		assertThat(list.getNumberOfPending(), is(0));
+	public void givenAnEmptyListShouldContainNoPendingItems() {
+		assertThat(sut.getPending(), is(empty()));
+		assertThat(sut.getNumberOfPending(), is(0));
 	}
-	
+
 	@Test
-	public void givenANewListShouldContainNoCompletedItems() {
-		//Act
-		TodoList list = new TodoList();
-		//Assert
-		assertThat(list.getNumberOfCompleted(), is(0));
+	public void givenAnEmptyListShouldContainNoCompletedItems() {
+		assertThat(sut.getCompleted(), is(empty()));
+		assertThat(sut.getNumberOfCompleted(), is(0));
 	}
-	
+
 	@Test
 	public void givenAListAddingANewItemShouldStoreItInPending() {
-		//Arrange
-		TodoList list = new TodoList();
+		// Arrange
 		TodoItem item = new TodoItem("My new item");
-		//Act
-		list.add(item);
-		//Assert
-		assertThat(list.getPending(), hasItem(item));
+		// Act
+		sut.add(item);
+		// Assert
+		assertThat(sut.getPending(), contains(item));
+	}
+
+	@Test
+	public void givenAListAddingANewItemShouldIncreasePendingItemsNumber() {
+		// Arrange
+		int startPendingItemsNumber = sut.getNumberOfPending();
+		TodoItem item = new TodoItem("My new item");
+		// Act
+		sut.add(item);
+		// Assert
+		assertThat(sut.getNumberOfPending(), is(startPendingItemsNumber + 1));
 	}
 	
 	@Test
 	public void givenAListAddingANullItemShouldDoNothing() {
-		//Arrange
-		TodoList list = new TodoList();
+		// Arrange
 		TodoItem item = null;
-		//Act
-		list.add(item);
-		//Assert
-		assertThat(list.getPending(), not(hasItem(item)));
+		List<TodoItem> startPending = sut.getPending();
+		int startPendingItemsNumber = sut.getNumberOfPending();
+		// Act
+		sut.add(item);
+		// Assert
+		assertThat(sut.getPending(), is(startPending));
+		assertThat(sut.getNumberOfPending(), is(startPendingItemsNumber));
 	}
-	
+
 	@Test
-	public void givenAListAddingANewItemShouldIncreasePendingItemsNumber() {
-		//Arrange
-		TodoList list = new TodoList();
-		int startPendingItemsNumber = list.getNumberOfPending();
+	public void givenAListAddingANewItemShouldNotStoreItInCompleted() {
+		// Arrange
 		TodoItem item = new TodoItem("My new item");
-		//Act
-		list.add(item);
-		//Assert
-		assertThat(list.getNumberOfPending(), is(startPendingItemsNumber+1));
+		List<TodoItem> startCompleted = sut.getCompleted();
+		// Act
+		sut.add(item);
+		// Assert
+		assertThat(sut.getCompleted(), is(startCompleted));
 	}
 	
 	@Test
 	public void givenAListAddingANewItemShouldNotIncreaseCompletedItemsNumber() {
-		//Arrange
-		TodoList list = new TodoList();
-		int startCompletedItemsNumber = list.getNumberOfCompleted();
+		// Arrange
+		int startCompletedItemsNumber = sut.getNumberOfCompleted();
 		TodoItem item = new TodoItem("My new item");
+		// Act
+		sut.add(item);
+		// Assert
+		assertThat(sut.getNumberOfCompleted(), is(startCompletedItemsNumber));
+	}
+
+	@Test
+	public void givenAnEmptyListCompletingAnItemShouldDoNothing() {
+		// Arrange
+		List<TodoItem> startCompleted = sut.getCompleted();
+		int startCompletedItemsNumber = sut.getNumberOfCompleted();
+		TodoItem item = new TodoItem("My new item");
+		// Act
+		sut.complete(item);
+		// Assert
+		assertThat(sut.getCompleted(), is(startCompleted));
+		assertThat(sut.getNumberOfCompleted(), is(startCompletedItemsNumber));
+	}
+
+	@Test
+	public void givenAListCompletingANullItemShouldDoNothing() {
+		// Arrange
+		List<TodoItem> startCompleted = sut.getCompleted();
+		int startCompletedItemsNumber = sut.getNumberOfCompleted();
+		// Act
+		sut.complete(null);
+		// Assert
+		assertThat(sut.getCompleted(), is(startCompleted));
+		assertThat(sut.getNumberOfCompleted(), is(startCompletedItemsNumber));
+	}
+	
+	@Test
+	public void givenAListCompletingANonAddedItemShouldDoNothing() {
+		//Arrange
+		int startCompletedItemsNumber = sut.getNumberOfCompleted();
+		List<TodoItem> startCompletedItems = sut.getCompleted();
+		TodoItem addedItem = new TodoItem("My added item");
+		TodoItem nonAddedItem = new TodoItem("My non added item");
 		//Act
-		list.add(item);
+		sut.add(addedItem);
+		sut.complete(nonAddedItem);
 		//Assert
-		assertThat(list.getNumberOfCompleted(), is(startCompletedItemsNumber));
+		assertThat(sut.getCompleted(), is(startCompletedItems));
+		assertThat(sut.getNumberOfCompleted(), is(startCompletedItemsNumber));
+	}
+	
+	@Test
+	public void givenAListCompletingAnAddedItemShouldMoveIt() {
+		//Arrange
+		int startCompletedItemsNumber = sut.getNumberOfCompleted();
+		TodoItem addedItem = new TodoItem("My added item");
+		//Act
+		sut.add(addedItem);
+		int startPendingItemsNumber = sut.getNumberOfPending();
+		sut.complete(addedItem);
+		//Assert
+		assertThat(sut.getNumberOfPending(), is(startPendingItemsNumber-1));
+		assertThat(sut.getPending(), not(contains(addedItem)));
+		assertThat(sut.getNumberOfCompleted(), is(startCompletedItemsNumber+1));
+		assertThat(sut.getCompleted(), contains(addedItem));
 	}
 }

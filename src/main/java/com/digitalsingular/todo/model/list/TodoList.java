@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 public class TodoList {
 
 	private List<TodoItem> pending = new ArrayList<>();
+	private List<TodoItem> completed = new ArrayList<>();
 	
 	public int getNumberOfPending() {
 		return pending.size();
@@ -16,7 +17,7 @@ public class TodoList {
 
 	public void add(TodoItem item) {
 		if(item != null) {
-			this.pending.add(item);
+			pending.add(item);
 		}
 	}
 
@@ -25,7 +26,17 @@ public class TodoList {
 	}
 
 	public int getNumberOfCompleted() {
-		return 0;
+		return completed.size();
 	}
 
+	public void complete(TodoItem item) {
+		if (item != null && !pending.isEmpty() && pending.contains(item) ) {
+			pending.remove(item);
+			completed.add(item);
+		}
+	}
+
+	public List<TodoItem> getCompleted() {
+		return ImmutableList.copyOf(completed);
+	}
 }
