@@ -11,10 +11,12 @@ public class TodoListService {
 	@Autowired
 	private TodoItem initialItem;
 
+	@Autowired
+	private TodoList initialList;
+
 	public TodoList createList() {
-		TodoList list = new TodoList();
-		list.add(initialItem);
-		return list;
+		initialList.add(initialItem);
+		return initialList;
 	}
 
 }
