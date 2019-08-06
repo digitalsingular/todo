@@ -10,13 +10,13 @@ public class TodoList {
 
 	private List<TodoItem> pending = new ArrayList<>();
 	private List<TodoItem> completed = new ArrayList<>();
-	
+
 	public int getNumberOfPending() {
 		return pending.size();
 	}
 
 	public void add(TodoItem item) {
-		if(item != null) {
+		if (item != null) {
 			pending.add(item);
 		}
 	}
@@ -30,7 +30,7 @@ public class TodoList {
 	}
 
 	public void complete(TodoItem item) {
-		if (item != null && !pending.isEmpty() && pending.contains(item) ) {
+		if (item != null && !pending.isEmpty() && pending.contains(item)) {
 			pending.remove(item);
 			completed.add(item);
 		}
@@ -38,5 +38,10 @@ public class TodoList {
 
 	public List<TodoItem> getCompleted() {
 		return ImmutableList.copyOf(completed);
+	}
+
+	@Override
+	public String toString() {
+		return "TodoList [pending=" + pending + ", completed=" + completed + "]";
 	}
 }

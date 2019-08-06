@@ -7,7 +7,7 @@
     http://www.springframework.org/schema/context/spring-context.xsd">
     
     <bean id="welcomeItem"  class="com.digitalsingular.todo.model.item.TodoItem">
-    	<constructor-arg name="description" value="Mi primer item"></constructor-arg>
+    	<constructor-arg name="description" value="Mi primer item"/>
     </bean>
- 
+ 	<context:component-scan base-package="com.digitalsingular.todo"/>
 </beans>
