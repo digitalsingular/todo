@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import com.digitalsingular.todo.model.item.TodoItem;
 
-public class TodoListTests {
+public class TodoListTest {
 	
 	private TodoList sut = null;
 	
