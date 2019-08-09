@@ -4,10 +4,12 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.digitalsingular.todo.model.list.TodoList;
 import com.digitalsingular.todo.model.list.TodoListService;
@@ -16,6 +18,8 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @PropertySource("classpath:application.properties")
+@EnableWebMvc
+@ComponentScan("com.digitalsingular.todo")
 public class AppConfiguration {
 
 	@Autowired
