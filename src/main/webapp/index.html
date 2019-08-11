@@ -3,6 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+	integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+	crossorigin="anonymous"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$.get("http://localhost:8080/todo/list", function(datos) {
+			alert(datos);
+		});
+	});
+</script>
 </head>
 <body>
 Index
