@@ -18,9 +18,15 @@ public class TodoListService {
 		return initialList;
 	}
 
-	public void createList(TodoItem initialItem) {
-		if (initialItem == null) {
+	public TodoList getList() {
+		return initialList;
+	}
+
+	public void addItem(TodoItem item) {
+		if (item == null) {
 			throw new IllegalArgumentException();
+		} else {
+			initialList.add(item);
 		}
 	}
 }

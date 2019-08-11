@@ -1,10 +1,13 @@
 package com.digitalsingular.todo.model.list;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.digitalsingular.todo.model.item.TodoItem;
 
 @RestController
 @RequestMapping(value = "/list")
@@ -13,9 +16,13 @@ public class TodoListController {
 	@Autowired
 	public TodoListService todoListService;
 
-	@CrossOrigin
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping
 	public String todo() {
-		return todoListService.createList().toString();
+		return todoListService.getList().toString();
+	}
+
+	@PutMapping
+	public void addItem(@RequestBody String description) {
+		todoListService.addItem(new TodoItem(description));
 	}
 }

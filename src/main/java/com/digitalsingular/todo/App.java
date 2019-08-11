@@ -10,6 +10,6 @@ public class App {
 		ApplicationContext ctx = new AnnotationConfigApplicationContext(AppConfiguration.class);
 		TodoListService service = ctx.getBean(TodoListService.class);
 		service.createList();
-		service.createList(null);
+		service.addItem(null);
 	}
 }
