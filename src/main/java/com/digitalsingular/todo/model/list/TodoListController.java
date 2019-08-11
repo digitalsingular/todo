@@ -14,10 +14,10 @@ import com.digitalsingular.todo.model.item.TodoItem;
 public class TodoListController {
 
 	@Autowired
-	public TodoListService todoListService;
+	private TodoListService todoListService;
 
 	@GetMapping
-	public String todo() {
+	public String list() {
 		return todoListService.getList().toString();
 	}
 

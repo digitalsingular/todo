@@ -1,34 +1,42 @@
 package com.digitalsingular.todo.model.list;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+
+import com.digitalsingular.todo.AppConfiguration;
+import com.digitalsingular.todo.TestAppConfiguration;
+
+@RunWith(SpringRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = { AppConfiguration.class, TestAppConfiguration.class })
+@ActiveProfiles("test")
 public class TodoListControllerTest {
 
-	private RestTemplate restTemplate;
+	@Autowired
+	private TodoListController controller;
 
-	@Before
-	public void setUp() {
-		restTemplate = new RestTemplate();
+	@Test
+	public void givenCallListShouldReturnEmptyList() {
+		String list = controller.list();
+		assertThat(list).isNotBlank();
 	}
 
 	@Test
-	public void givenGetToListShouldReturnList() {
-		System.out.println(restTemplate.getForObject("http://localhost:8080/todo/list", String.class));
+	public void givenAValidDescriptionAddItemShouldAddIt() {
+		String description = "description";
+		controller.addItem(description);
+		assertThat(controller.list()).contains(description);
 	}
 
-	@Test
-	public void givenPutToListShouldReturnListWithItem() {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		String resourceUrl = "http://localhost:8080/todo/list";
-		HttpEntity<String> requestUpdate = new HttpEntity<>("nuevo item", headers);
-		restTemplate.exchange(resourceUrl, HttpMethod.PUT, requestUpdate, Void.class);
-		System.out.println(restTemplate.getForObject("http://localhost:8080/todo/list", String.class));
+	@Test(expected = IllegalArgumentException.class)
+	public void givenANullDescriptionAddItemShouldThrowException() {
+		controller.addItem(null);
 	}
 }

@@ -10,6 +10,9 @@ public class TodoItem {
 	private String description;
 
 	public TodoItem(String description) {
+		if (description == null || "".equals(description.trim())) {
+			throw new IllegalArgumentException("La descripcion del item no puede ser nula o blanca");
+		}
 		this.description = description;
 	}
 

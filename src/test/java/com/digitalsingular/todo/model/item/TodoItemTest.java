@@ -1,20 +1,30 @@
 package com.digitalsingular.todo.model.item;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
 public class TodoItemTest {
 
-	@Test
-	public void cobertura50Porciento() {
-		TodoItem item =  new TodoItem("tadá!");
+	@Test(expected = IllegalArgumentException.class)
+	public void givenANullDescriptionShouldNotBuildItem() {
+		new TodoItem(null);
 	}
-	
+
+	@Test(expected = IllegalArgumentException.class)
+	public void givenAnEmptyDescriptionShouldNotBuildItem() {
+		new TodoItem("");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void givenAnAllBlankDescriptionShouldNotBuildItem() {
+		new TodoItem(" ");
+	}
+
 	@Test
-	public void cobertura100Porcierto() {
-		TodoItem item =  new TodoItem("tadá!");
-		item.getDescription();
+	public void givenATextDescriptionShouldBuildItem() {
+		String description = "test item";
+		TodoItem item = new TodoItem(description);
+		assertThat(item.getDescription()).isEqualTo(description);
 	}
 }
