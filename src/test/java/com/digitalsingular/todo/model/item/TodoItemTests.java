@@ -1,19 +1,30 @@
 package com.digitalsingular.todo.model.item;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
 public class TodoItemTests {
 
+	@Test(expected = IllegalArgumentException.class)
+	public void givenANullDescriptionShouldNotBuildItem() {
+		new TodoItem(null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void givenAnEmptyDescriptionShouldNotBuildItem() {
+		new TodoItem("");
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void givenAnAllBlankDescriptionShouldNotBuildItem() {
+		new TodoItem(" ");
+	}
+
 	@Test
-	public void givenADescriptionItemShouldBeBuilt() {
-		//Arrange
-		String description = "My new item";
-		//Act
+	public void givenATextDescriptionShouldBuildItem() {
+		String description = "test item";
 		TodoItem item = new TodoItem(description);
-		//Assert
-		assertThat(item.getDescription(), is(description));
+		assertThat(item.getDescription()).isEqualTo(description);
 	}
 }
