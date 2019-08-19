@@ -1,16 +1,29 @@
-package com.digitalsingular.todo.model.list;
+package com.digitalsingular.todo.list;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
-import com.digitalsingular.todo.model.item.TodoItem;
+import com.digitalsingular.todo.item.TodoItem;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 public class TodoList {
 
-	private List<TodoItem> pending = new ArrayList<>();
-	private List<TodoItem> completed = new ArrayList<>();
+	private String description;
+
+	private List<TodoItem> pending;
+
+	private List<TodoItem> completed;
+
+	public TodoList(String description) {
+		super();
+		this.description = description;
+		pending = Lists.newArrayList();
+		completed = Lists.newArrayList();
+	}
+
+	public String getDescription() {
+		return description;
+	}
 
 	public int getNumberOfPending() {
 		return pending.size();
@@ -44,20 +57,5 @@ public class TodoList {
 	@Override
 	public String toString() {
 		return "TodoList [pending=" + pending + ", completed=" + completed + "]";
-	}
-
-	public TodoItem getPendingItem(int position) throws NoSuchElementException {
-		TodoItem item = null;
-		if (positionInBounds(position, pending)) {
-			item = pending.get(0);
-		} else {
-			throw new NoSuchElementException(
-					"No hay elemento en la posicion " + position);
-		}
-		return item;
-	}
-
-	private boolean positionInBounds(int position, List<TodoItem> list) {
-		return position > 0 && position < list.size();
 	}
 }

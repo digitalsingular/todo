@@ -1,4 +1,4 @@
-package com.digitalsingular.todo.model.item;
+package com.digitalsingular.todo.item;
 
 public class TodoItem {
 

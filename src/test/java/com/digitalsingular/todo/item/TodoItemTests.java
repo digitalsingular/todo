@@ -1,8 +1,10 @@
-package com.digitalsingular.todo.model.item;
+package com.digitalsingular.todo.item;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
+
+import com.digitalsingular.todo.item.TodoItem;
 
 public class TodoItemTests {
 

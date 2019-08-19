@@ -1,4 +1,4 @@
-package com.digitalsingular.todo.model.list;
+package com.digitalsingular.todo.list;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.digitalsingular.todo.model.item.TodoItem;
+import com.digitalsingular.todo.item.TodoItem;
 
 public class TodoListTests {
 
@@ -15,7 +15,14 @@ public class TodoListTests {
 
 	@Before
 	public void setUp() {
-		sut = new TodoList();
+		sut = new TodoList("sut");
+	}
+
+	@Test
+	public void givenANewListDescriptionShouldBeTheStated() {
+		String description = "sut";
+		TodoList sut = new TodoList(description);
+		assertThat(sut.getDescription()).isEqualTo(description);
 	}
 
 	@Test
