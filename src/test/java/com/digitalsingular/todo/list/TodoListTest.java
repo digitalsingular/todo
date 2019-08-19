@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.digitalsingular.todo.item.TodoItem;
 
-public class TodoListTests {
+public class TodoListTest {
 
 	private TodoList sut = null;
 
@@ -91,6 +91,72 @@ public class TodoListTests {
 		sut.add(item);
 		// Assert
 		assertThat(sut.getNumberOfCompleted()).isEqualTo(startCompletedItemsNumber);
+	}
+
+	@Test
+	public void givenTwoListsWithDifferentDescriptionShouldNotBeEquals() {
+		TodoList list1 = new TodoList("Test List 1");
+		TodoList list2 = new TodoList("Test List 2");
+		assertThat(list1.equals(list2)).isFalse();
+	}
+
+	@Test
+	public void givenTwoListsWithTheSameDescriptionAndTheSamePendingItemsShouldBeEquals() {
+		String listDescription = "Test List";
+		TodoItem item1 = new TodoItem("Test Item 1");
+		TodoItem item2 = new TodoItem("Test Item 2");
+		TodoList list1 = new TodoList(listDescription);
+		TodoList list2 = new TodoList(listDescription);
+		list1.add(item1);
+		list1.add(item2);
+		list2.add(item1);
+		list2.add(item2);
+		assertThat(list1.equals(list2)).isTrue();
+	}
+
+	@Test
+	public void givenTwoListsWithTheSameDescriptionAndDifferentPendingItemsShouldBeNotEquals() {
+		String listDescription = "Test List";
+		TodoItem item1 = new TodoItem("Test Item 1");
+		TodoItem item2 = new TodoItem("Test Item 2");
+		TodoList list1 = new TodoList(listDescription);
+		TodoList list2 = new TodoList(listDescription);
+		list1.add(item1);
+		list1.add(item2);
+		list2.add(item1);
+		assertThat(list1.equals(list2)).isFalse();
+	}
+
+	@Test
+	public void givenTwoListsWithTheSameDescriptionTheSamePendingItemsAndTheSameCompletedItemsShouldBeEquals() {
+		String listDescription = "Test List";
+		TodoItem item1 = new TodoItem("Test Item 1");
+		TodoItem item2 = new TodoItem("Test Item 2");
+		TodoList list1 = new TodoList(listDescription);
+		TodoList list2 = new TodoList(listDescription);
+		list1.add(item1);
+		list1.add(item2);
+		list2.add(item1);
+		list2.add(item2);
+		list1.complete(item1);
+		list2.complete(item1);
+		assertThat(list1.equals(list2)).isTrue();
+	}
+
+	@Test
+	public void givenTwoListsWithTheSameDescriptionTheSamePendingItemsAndDifferentCompletedItemsShouldNotBeEquals() {
+		String listDescription = "Test List";
+		TodoItem item1 = new TodoItem("Test Item 1");
+		TodoItem item2 = new TodoItem("Test Item 2");
+		TodoList list1 = new TodoList(listDescription);
+		TodoList list2 = new TodoList(listDescription);
+		list1.add(item1);
+		list1.add(item2);
+		list2.add(item1);
+		list2.add(item2);
+		list1.complete(item1);
+		list2.complete(item2);
+		assertThat(list1.equals(list2)).isFalse();
 	}
 
 	@Test

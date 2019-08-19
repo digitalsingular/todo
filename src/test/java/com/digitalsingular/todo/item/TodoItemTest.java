@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.digitalsingular.todo.item.TodoItem;
 
-public class TodoItemTests {
+public class TodoItemTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void givenANullDescriptionShouldNotBuildItem() {

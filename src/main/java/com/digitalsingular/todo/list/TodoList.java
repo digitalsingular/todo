@@ -1,6 +1,7 @@
 package com.digitalsingular.todo.list;
 
 import java.util.List;
+import java.util.Objects;
 
 import com.digitalsingular.todo.item.TodoItem;
 import com.google.common.collect.ImmutableList;
@@ -37,6 +38,27 @@ public class TodoList {
 
 	public List<TodoItem> getPending() {
 		return ImmutableList.copyOf(pending);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(completed, description, pending);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		TodoList other = (TodoList) obj;
+		return Objects.equals(completed, other.completed) && Objects.equals(description, other.description)
+				&& Objects.equals(pending, other.pending);
 	}
 
 	public int getNumberOfCompleted() {
