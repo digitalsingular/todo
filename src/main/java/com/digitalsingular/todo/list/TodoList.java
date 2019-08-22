@@ -3,27 +3,57 @@ package com.digitalsingular.todo.list;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import com.digitalsingular.todo.item.TodoItem;
+import com.digitalsingular.todo.user.User;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
+@Entity
+@Table(name = "TODO_LISTS")
 public class TodoList {
+
+	@Id
+	@GeneratedValue
+	private Long id;
+
+	@OneToOne
+	@JoinColumn(name="user_id")
+	private User user;
 
 	private String description;
 
+	@Transient
 	private List<TodoItem> pending;
 
+	@Transient
 	private List<TodoItem> completed;
 
-	public TodoList(String description) {
+	public TodoList(User user, String description) {
 		super();
+		this.user = user;
 		this.description = description;
 		pending = Lists.newArrayList();
 		completed = Lists.newArrayList();
 	}
 
+	public Long getId() {
+		return id;
+	}
+
 	public String getDescription() {
 		return description;
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 	public int getNumberOfPending() {
