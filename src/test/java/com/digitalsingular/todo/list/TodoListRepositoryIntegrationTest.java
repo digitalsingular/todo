@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.digitalsingular.todo.user.User;
-
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class TodoListRepositoryIntegrationTest {
@@ -19,7 +17,7 @@ public class TodoListRepositoryIntegrationTest {
 
 	@Test
 	public void givenANewListShouldPersistAndReturnIt() {
-		TodoList list = new TodoList(new User("test", "test@test.com"), "Test List");
+		TodoList list = new TodoList("Test List");
 		TodoList persistedList = sut.save(list);
 		assertThat(persistedList).isNotNull();
 		assertThat(list).isEqualTo(persistedList);

@@ -1,15 +1,19 @@
 package com.digitalsingular.todo.user;
 
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.digitalsingular.todo.list.TodoList;
+import com.google.common.collect.Sets;
 
 @Entity
 @Table(name = "USERS")
@@ -23,17 +27,21 @@ public class User {
 
 	private String email;
 
-	@OneToOne(mappedBy = "user", cascade = {CascadeType.ALL}, orphanRemoval = true)
-	private TodoList list;
+	@OneToMany(cascade = {CascadeType.ALL},
+			orphanRemoval = true,
+			fetch = FetchType.EAGER)
+	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	private Set<TodoList> lists;
 
 	public User(String login, String email) {
 		super();
 		this.login = login;
 		this.email = email;
+		lists = Sets.newHashSet();
 	}
 
-	public void setNewList(String description) {
-		list = new TodoList(this, description);
+	public void addList(String description) {
+		lists.add(new TodoList(description));
 	}
 
 	public String getEmail() {
@@ -52,8 +60,8 @@ public class User {
 		return login;
 	}
 
-	public TodoList getList() {
-		return list;
+	public Set<TodoList> getLists() {
+		return lists;
 	}
 
 	@Override

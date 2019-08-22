@@ -27,11 +27,11 @@ public class UserRepositoryIntegrationTest {
 	@Test
 	public void givenANewUserWithAListShouldPersistAndReturnUserAndList() {
 		User user = new User("test", "test@test.com");
-		user.setNewList("test list");
+		user.addList("test list");
 		User persistedUser = sut.save(user);
 		assertThat(user).isEqualTo(persistedUser);
 		assertThat(persistedUser.getId()).isNotNull();
-		assertThat(persistedUser.getList()).isEqualTo(user.getList());
-		assertThat(persistedUser.getList().getId()).isNotNull();
+		assertThat(persistedUser.getLists()).isEqualTo(user.getLists());
+		persistedUser.getLists().stream().forEach(list -> assertThat(list.getId()).isNotNull());
 	}
 }

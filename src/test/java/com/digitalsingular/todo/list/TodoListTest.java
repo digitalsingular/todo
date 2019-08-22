@@ -8,7 +8,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.digitalsingular.todo.item.TodoItem;
-import com.digitalsingular.todo.user.User;
 
 public class TodoListTest {
 
@@ -16,13 +15,13 @@ public class TodoListTest {
 
 	@Before
 	public void setUp() {
-		sut = new TodoList(new User("test", "test@test.com"), "sut");
+		sut = new TodoList("sut");
 	}
 
 	@Test
 	public void givenANewListDescriptionShouldBeTheStated() {
 		String description = "sut";
-		TodoList sut = new TodoList(new User("test", "test@test.com"), description);
+		TodoList sut = new TodoList(description);
 		assertThat(sut.getDescription()).isEqualTo(description);
 	}
 
@@ -96,8 +95,8 @@ public class TodoListTest {
 
 	@Test
 	public void givenTwoListsWithDifferentDescriptionShouldNotBeEquals() {
-		TodoList list1 = new TodoList(new User("test", "test@test.com"), "Test List 1");
-		TodoList list2 = new TodoList(new User("test", "test@test.com"), "Test List 2");
+		TodoList list1 = new TodoList("Test List 1");
+		TodoList list2 = new TodoList("Test List 2");
 		assertThat(list1.equals(list2)).isFalse();
 	}
 
@@ -106,8 +105,8 @@ public class TodoListTest {
 		String listDescription = "Test List";
 		TodoItem item1 = new TodoItem("Test Item 1");
 		TodoItem item2 = new TodoItem("Test Item 2");
-		TodoList list1 = new TodoList(new User("test", "test@test.com"), listDescription);
-		TodoList list2 = new TodoList(new User("test", "test@test.com"), listDescription);
+		TodoList list1 = new TodoList(listDescription);
+		TodoList list2 = new TodoList(listDescription);
 		list1.add(item1);
 		list1.add(item2);
 		list2.add(item1);
@@ -120,8 +119,8 @@ public class TodoListTest {
 		String listDescription = "Test List";
 		TodoItem item1 = new TodoItem("Test Item 1");
 		TodoItem item2 = new TodoItem("Test Item 2");
-		TodoList list1 = new TodoList(new User("test", "test@test.com"), listDescription);
-		TodoList list2 = new TodoList(new User("test", "test@test.com"), listDescription);
+		TodoList list1 = new TodoList(listDescription);
+		TodoList list2 = new TodoList(listDescription);
 		list1.add(item1);
 		list1.add(item2);
 		list2.add(item1);
@@ -133,8 +132,8 @@ public class TodoListTest {
 		String listDescription = "Test List";
 		TodoItem item1 = new TodoItem("Test Item 1");
 		TodoItem item2 = new TodoItem("Test Item 2");
-		TodoList list1 = new TodoList(new User("test", "test@test.com"), listDescription);
-		TodoList list2 = new TodoList(new User("test", "test@test.com"), listDescription);
+		TodoList list1 = new TodoList(listDescription);
+		TodoList list2 = new TodoList(listDescription);
 		list1.add(item1);
 		list1.add(item2);
 		list2.add(item1);
@@ -149,8 +148,8 @@ public class TodoListTest {
 		String listDescription = "Test List";
 		TodoItem item1 = new TodoItem("Test Item 1");
 		TodoItem item2 = new TodoItem("Test Item 2");
-		TodoList list1 = new TodoList(new User("test", "test@test.com"), listDescription);
-		TodoList list2 = new TodoList(new User("test", "test@test.com"), listDescription);
+		TodoList list1 = new TodoList(listDescription);
+		TodoList list2 = new TodoList(listDescription);
 		list1.add(item1);
 		list1.add(item2);
 		list2.add(item1);
