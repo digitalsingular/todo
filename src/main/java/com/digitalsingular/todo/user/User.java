@@ -5,11 +5,9 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.digitalsingular.todo.list.TodoList;
@@ -27,10 +25,8 @@ public class User {
 
 	private String email;
 
-	@OneToMany(cascade = {CascadeType.ALL},
-			orphanRemoval = true,
-			fetch = FetchType.EAGER)
-	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@ManyToMany(mappedBy = "users",
+			cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<TodoList> lists;
 
 	public User(String login, String email) {
@@ -40,8 +36,25 @@ public class User {
 		lists = Sets.newHashSet();
 	}
 
-	public void addList(String description) {
-		lists.add(new TodoList(description));
+	public void addList(TodoList list) {
+		if (list != null) {
+			lists.add(list);
+		}
+	}
+
+	public void removeList(TodoList list) {
+		if (lists.contains(list)) {
+			lists.remove(list);
+			list.removeUser(this);
+		}
+	}
+
+	public void setLists(Set<TodoList> lists) {
+		this.lists = lists;
+	}
+
+	public Set<TodoList> getLists() {
+		return lists;
 	}
 
 	public String getEmail() {
@@ -58,10 +71,6 @@ public class User {
 
 	public String getLogin() {
 		return login;
-	}
-
-	public Set<TodoList> getLists() {
-		return lists;
 	}
 
 	@Override

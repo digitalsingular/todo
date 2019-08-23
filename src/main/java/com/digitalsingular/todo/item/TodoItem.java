@@ -6,8 +6,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.springframework.util.StringUtils;
+
+import com.digitalsingular.todo.list.TodoList;
 
 @Entity
 @Table(name = "TODO_ITEMS")
@@ -19,6 +22,11 @@ public class TodoItem {
 
 	private String description;
 
+	private ItemStatus status;
+
+	@Transient
+	private TodoList list;
+
 	public TodoItem(String description) {
 		super();
 		if (StringUtils.isEmpty(description)) {
@@ -26,6 +34,7 @@ public class TodoItem {
 					"No se puede crear un item sin descripcion");
 		}
 		this.description = description;
+		status = ItemStatus.PENDING;
 	}
 
 	public Long getId() {
@@ -34,6 +43,26 @@ public class TodoItem {
 
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public ItemStatus getStatus() {
+		return status;
+	}
+
+	public TodoList getList() {
+		return list;
+	}
+
+	public void setList(TodoList list) {
+		this.list = list;
+	}
+
+	public void complete() {
+		status = ItemStatus.COMPLETE;
 	}
 
 	@Override

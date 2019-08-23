@@ -101,84 +101,13 @@ public class TodoListTest {
 	}
 
 	@Test
-	public void givenTwoListsWithTheSameDescriptionAndTheSamePendingItemsShouldBeEquals() {
-		String listDescription = "Test List";
-		TodoItem item1 = new TodoItem("Test Item 1");
-		TodoItem item2 = new TodoItem("Test Item 2");
-		TodoList list1 = new TodoList(listDescription);
-		TodoList list2 = new TodoList(listDescription);
-		list1.add(item1);
-		list1.add(item2);
-		list2.add(item1);
-		list2.add(item2);
-		assertThat(list1.equals(list2)).isTrue();
-	}
-
-	@Test
-	public void givenTwoListsWithTheSameDescriptionAndDifferentPendingItemsShouldBeNotEquals() {
-		String listDescription = "Test List";
-		TodoItem item1 = new TodoItem("Test Item 1");
-		TodoItem item2 = new TodoItem("Test Item 2");
-		TodoList list1 = new TodoList(listDescription);
-		TodoList list2 = new TodoList(listDescription);
-		list1.add(item1);
-		list1.add(item2);
-		list2.add(item1);
-		assertThat(list1.equals(list2)).isFalse();
-	}
-
-	@Test
-	public void givenTwoListsWithTheSameDescriptionTheSamePendingItemsAndTheSameCompletedItemsShouldBeEquals() {
-		String listDescription = "Test List";
-		TodoItem item1 = new TodoItem("Test Item 1");
-		TodoItem item2 = new TodoItem("Test Item 2");
-		TodoList list1 = new TodoList(listDescription);
-		TodoList list2 = new TodoList(listDescription);
-		list1.add(item1);
-		list1.add(item2);
-		list2.add(item1);
-		list2.add(item2);
-		list1.complete(item1);
-		list2.complete(item1);
-		assertThat(list1.equals(list2)).isTrue();
-	}
-
-	@Test
-	public void givenTwoListsWithTheSameDescriptionTheSamePendingItemsAndDifferentCompletedItemsShouldNotBeEquals() {
-		String listDescription = "Test List";
-		TodoItem item1 = new TodoItem("Test Item 1");
-		TodoItem item2 = new TodoItem("Test Item 2");
-		TodoList list1 = new TodoList(listDescription);
-		TodoList list2 = new TodoList(listDescription);
-		list1.add(item1);
-		list1.add(item2);
-		list2.add(item1);
-		list2.add(item2);
-		list1.complete(item1);
-		list2.complete(item2);
-		assertThat(list1.equals(list2)).isFalse();
-	}
-
-	@Test
 	public void givenAnEmptyListCompletingAnItemShouldDoNothing() {
 		// Arrange
 		List<TodoItem> startCompleted = sut.getCompleted();
 		int startCompletedItemsNumber = sut.getNumberOfCompleted();
 		TodoItem item = new TodoItem("My new item");
 		// Act
-		sut.complete(item);
-		// Assert
-		assertThat(sut.getCompleted()).isEqualTo(startCompleted);
-		assertThat(sut.getNumberOfCompleted()).isEqualTo(startCompletedItemsNumber);
-	}
-
-	@Test
-	public void givenAListCompletingANullItemShouldDoNothing() {
-		// Arrange
-		List<TodoItem> startCompleted = sut.getCompleted();
-		int startCompletedItemsNumber = sut.getNumberOfCompleted();
-		// Act
-		sut.complete(null);
+		item.complete();
 		// Assert
 		assertThat(sut.getCompleted()).isEqualTo(startCompleted);
 		assertThat(sut.getNumberOfCompleted()).isEqualTo(startCompletedItemsNumber);
@@ -193,7 +122,7 @@ public class TodoListTest {
 		TodoItem nonAddedItem = new TodoItem("My non added item");
 		// Act
 		sut.add(addedItem);
-		sut.complete(nonAddedItem);
+		nonAddedItem.complete();
 		// Assert
 		assertThat(sut.getCompleted()).isEqualTo(startCompletedItems);
 		assertThat(sut.getNumberOfCompleted()).isEqualTo(startCompletedItemsNumber);
@@ -207,7 +136,7 @@ public class TodoListTest {
 		// Act
 		sut.add(addedItem);
 		int startPendingItemsNumber = sut.getNumberOfPending();
-		sut.complete(addedItem);
+		addedItem.complete();
 		// Assert
 		assertThat(sut.getNumberOfPending()).isEqualTo(startPendingItemsNumber - 1);
 		assertThat(sut.getPending()).doesNotContain(addedItem);
