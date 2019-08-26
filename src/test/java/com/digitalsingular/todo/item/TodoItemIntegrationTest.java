@@ -35,20 +35,6 @@ public class TodoItemIntegrationTest {
 	}
 
 	@Test
-	public void givenANewPriorizedTodoItemShouldPersistAndReturnId() {
-		EntityManager em = emf.createEntityManager();
-		EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		TodoItem item = new PriorizedTodoItem("test", ItemPriority.HIGH);
-		em.persist(item);
-		TodoItem persistedItem = em.find(TodoItem.class, item.getId());
-		tx.commit();
-		em.close();
-		assertThat(item.getId()).isNotNull();
-		assertThat(persistedItem).isEqualTo(item);
-	}
-
-	@Test
 	public void givenANewDescriptionShouldUpdateIt() {
 		String newDescription = "new description";
 		EntityManager em = emf.createEntityManager();

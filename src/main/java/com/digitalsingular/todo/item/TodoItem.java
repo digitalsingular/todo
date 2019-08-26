@@ -3,10 +3,9 @@ package com.digitalsingular.todo.item;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -15,7 +14,6 @@ import org.springframework.util.StringUtils;
 import com.digitalsingular.todo.list.TodoList;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(name = "TODO_ITEMS")
 public class TodoItem {
 
@@ -25,6 +23,7 @@ public class TodoItem {
 
 	private String description;
 
+	@Enumerated()
 	private ItemStatus status;
 
 	@Transient
