@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class TodoItemIntegrationTest {
+
 	@Autowired
 	private EntityManagerFactory emf;
 
@@ -25,6 +26,20 @@ public class TodoItemIntegrationTest {
 		EntityTransaction tx = em.getTransaction();
 		tx.begin();
 		TodoItem item = new TodoItem("test");
+		em.persist(item);
+		TodoItem persistedItem = em.find(TodoItem.class, item.getId());
+		tx.commit();
+		em.close();
+		assertThat(item.getId()).isNotNull();
+		assertThat(persistedItem).isEqualTo(item);
+	}
+
+	@Test
+	public void givenANewPriorizedTodoItemShouldPersistAndReturnId() {
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		TodoItem item = new PriorizedTodoItem("test", ItemPriority.HIGH);
 		em.persist(item);
 		TodoItem persistedItem = em.find(TodoItem.class, item.getId());
 		tx.commit();
