@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.digitalsingular.todo.list.TodoList;
 import com.digitalsingular.todo.list.TodoListService;
 
-@RestController
+@RestController("/lists")
 public class TodoListController {
 
 	private final TodoListService service;
@@ -18,7 +18,7 @@ public class TodoListController {
 		this.service = service;
 	}
 
-	@GetMapping("/lists")
+	@GetMapping
 	public Set<TodoList> getAllLists() {
 		return service.getAll();
 	}

@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.digitalsingular.todo.item.ItemStatus;
 import com.digitalsingular.todo.item.TodoItem;
@@ -37,8 +37,12 @@ public class TodoList {
 			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> users;
 
-	@Transient
+	@OneToMany(mappedBy = "list")
 	private List<TodoItem> items;
+
+	private TodoList() {
+		super();
+	}
 
 	public TodoList(String description) {
 		super();
