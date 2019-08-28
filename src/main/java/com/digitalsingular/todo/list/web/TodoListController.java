@@ -2,6 +2,8 @@ package com.digitalsingular.todo.list.web;
 
 import java.util.Set;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,13 +39,11 @@ public class TodoListController {
 	@GetMapping("/{id}")
 	public TodoList getList(@PathVariable long id) {
 		return service.get(id).orElseThrow(
-				() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND, "No existe una lista con id " + id));
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe una lista con id " + id));
 	}
 
 	@PostMapping
-	public ResponseEntity<TodoList> addList(@RequestBody TodoList todoList,
-			UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<TodoList> addList(@RequestBody @Valid TodoList todoList, UriComponentsBuilder ucBuilder) {
 		TodoList newList = service.add(todoList);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("lists/{id}").buildAndExpand(newList.getId()).toUri());
@@ -53,8 +53,8 @@ public class TodoListController {
 	@PutMapping
 	public TodoList updateList(@RequestBody TodoList todoList) {
 		TodoList outdatedTodoList = service.get(todoList.getId())
-				.orElseThrow(() -> new ResponseStatusException(
-						HttpStatus.NOT_FOUND, "No existe una lista con id " + todoList.getId()));
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+						"No existe una lista con id " + todoList.getId()));
 		outdatedTodoList.setUsers(todoList.getUsers());
 		outdatedTodoList = service.save(outdatedTodoList);
 		return outdatedTodoList;

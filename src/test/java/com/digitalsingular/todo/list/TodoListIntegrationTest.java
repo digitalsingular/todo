@@ -24,7 +24,7 @@ import com.jayway.jsonpath.JsonPath;
 import net.minidev.json.JSONArray;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment= WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Sql("/todo_lists.sql")
 public class TodoListIntegrationTest {
 
@@ -67,10 +67,12 @@ public class TodoListIntegrationTest {
 	}
 
 	@Test
-	public void postListsWithValidPayloadShouldReturnNewTodoList() {
+	public void postListsWithValidPayloadShouldReturnNewTodoList() throws JSONException {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<String> entity = new HttpEntity<>("\"description\":\"Integration tests\"", headers);
+		JSONObject jsonList = new JSONObject();
+		jsonList.put("description", "Integration tests");
+		HttpEntity<String> entity = new HttpEntity<>(jsonList.toString(), headers);
 		ResponseEntity<String> response = template.postForEntity("/lists", entity, String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 		Long retrievedListId = JsonPath.parse(response.getBody()).read("$['id']", Long.class);

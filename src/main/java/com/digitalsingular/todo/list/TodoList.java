@@ -13,6 +13,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 import com.digitalsingular.todo.item.ItemStatus;
 import com.digitalsingular.todo.item.TodoItem;
@@ -28,13 +29,11 @@ public class TodoList {
 	@GeneratedValue
 	private Long id;
 
+	@NotBlank
 	private String description;
 
 	@ManyToMany
-	@JoinTable(
-			name = "USERS_TODO_LISTS",
-			joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	@JoinTable(name = "USERS_TODO_LISTS", joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> users;
 
 	@OneToMany(mappedBy = "list")
@@ -42,13 +41,13 @@ public class TodoList {
 
 	private TodoList() {
 		super();
+		items = Lists.newArrayList();
+		users = Sets.newHashSet();
 	}
 
 	public TodoList(String description) {
-		super();
+		this();
 		this.description = description;
-		items = Lists.newArrayList();
-		users = Sets.newHashSet();
 	}
 
 	public void addUser(User user) {
