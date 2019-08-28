@@ -80,6 +80,17 @@ public class TodoListIntegrationTest {
 	}
 
 	@Test
+	public void postListsWithInvalidTodoListShouldReturnNewTodoList() throws JSONException {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		JSONObject jsonList = new JSONObject();
+		jsonList.put("description", "");
+		HttpEntity<String> entity = new HttpEntity<>(jsonList.toString(), headers);
+		ResponseEntity<String> response = template.postForEntity("/lists", entity, String.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+	}
+
+	@Test
 	public void postListsWithInvalidPayloadShouldReturnBadRequest() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
