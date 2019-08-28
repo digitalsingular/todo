@@ -26,14 +26,14 @@ public class TodoListControllerTest {
 	@Test
 	public void givenNoListsGetAllShouldReturnEmptySet() {
 		when(service.getAll()).thenReturn(Sets.newHashSet());
-		assertThat(sut.getAll()).isEmpty();
+		assertThat(sut.getLists()).isEmpty();
 	}
 
 	@Test
 	public void givenOneListGetAllShouldReturnIt() {
 		TodoList list = new TodoList("test");
 		when(service.getAll()).thenReturn(Sets.newLinkedHashSet(list));
-		assertThat(sut.getAll()).contains(list);
+		assertThat(sut.getLists()).contains(list);
 	}
 
 }
