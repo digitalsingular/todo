@@ -1,5 +1,6 @@
 package com.digitalsingular.todo.list;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,10 @@ public class TodoListService {
 
 	public Set<TodoList> getAll() {
 		return Sets.newHashSet(repository.findAll());
+	}
+
+	public Optional<TodoList> get(long id) {
+		return repository.findById(id);
 	}
 
 }
