@@ -1,8 +1,10 @@
 package com.digitalsingular.todo.list.web;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,30 +35,32 @@ public class TodoListController {
 
 	@GetMapping("")
 	public Set<TodoList> getLists() {
-		return service.getAll();
+		return service.getAll().stream().map(list -> {list.getUsers().clear(); return list;}).collect(Collectors.toSet());
 	}
 
 	@GetMapping("/{id}")
-	public TodoList getList(@PathVariable long id) {
-		return service.get(id).orElseThrow(
+	public TodoList getList(@Min(1) @PathVariable long id) {
+		TodoList list = service.get(id).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe una lista con id " + id));
+		list.getUsers().clear();
+		return list;
 	}
 
 	@PostMapping
-	public ResponseEntity<TodoList> addList(@RequestBody @Valid TodoList todoList, UriComponentsBuilder ucBuilder) {
+	public ResponseEntity<TodoList> addList(
+			@RequestBody @Valid TodoList todoList,
+			UriComponentsBuilder ucBuilder) {
 		TodoList newList = service.add(todoList);
+		newList.getUsers().clear();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("lists/{id}").buildAndExpand(newList.getId()).toUri());
 		return new ResponseEntity<>(newList, headers, HttpStatus.CREATED);
 	}
 
 	@PutMapping
-	public TodoList updateList(@RequestBody TodoList todoList) {
-		TodoList outdatedTodoList = service.get(todoList.getId())
-				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-						"No existe una lista con id " + todoList.getId()));
-		outdatedTodoList.setUsers(todoList.getUsers());
-		outdatedTodoList = service.save(outdatedTodoList);
-		return outdatedTodoList;
+	public TodoList updateList(@RequestBody @Valid TodoList todoList) {
+		TodoList updatedList = service.update(todoList);
+		updatedList.getUsers().clear();
+		return updatedList;
 	}
 }

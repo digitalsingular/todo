@@ -33,7 +33,9 @@ public class TodoList {
 	private String description;
 
 	@ManyToMany
-	@JoinTable(name = "USERS_TODO_LISTS", joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	@JoinTable(name = "USERS_TODO_LISTS",
+	joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"),
+	inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
 	private Set<User> users;
 
 	@OneToMany(mappedBy = "list")

@@ -29,11 +29,15 @@ public class User {
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private Set<TodoList> lists;
 
-	public User(String login, String email) {
+	private User() {
 		super();
+		lists = Sets.newHashSet();
+	}
+
+	public User(String login, String email) {
+		this();
 		this.login = login;
 		this.email = email;
-		lists = Sets.newHashSet();
 	}
 
 	public void addList(TodoList list) {
