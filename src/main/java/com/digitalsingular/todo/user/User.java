@@ -1,29 +1,48 @@
 package com.digitalsingular.todo.user;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.digitalsingular.todo.list.TodoList;
 import com.google.common.collect.Sets;
 
 @Entity
 @Table(name = "USERS")
-public class User {
+public class User implements UserDetails {
+
+	enum Role {
+		ADMIN, USER;
+	}
 
 	@Id
 	@GeneratedValue
 	private Long id;
 
+	@NotBlank
 	private String login;
 
 	private String email;
+
+	@Enumerated(EnumType.STRING)
+	private Role role;
+
+	@NotBlank
+	private String password;
 
 	@ManyToMany(mappedBy = "users",
 			cascade = {CascadeType.PERSIST, CascadeType.MERGE})
@@ -32,6 +51,7 @@ public class User {
 	private User() {
 		super();
 		lists = Sets.newHashSet();
+		role = Role.USER;
 	}
 
 	public User(String login, String email) {
@@ -77,6 +97,23 @@ public class User {
 		return login;
 	}
 
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	@Override
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(login);
@@ -99,6 +136,36 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", login=" + login + ", email=" + email + "]";
+		return "User [id=" + id + ", login=" + login + ", email=" + email + ", role=" + role + "]";
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Sets.newHashSet(new SimpleGrantedAuthority("ROLE_" + role.name().toUpperCase()));
+	}
+
+	@Override
+	public String getUsername() {
+		return getLogin();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
 	}
 }

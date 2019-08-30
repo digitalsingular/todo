@@ -5,6 +5,9 @@ import java.util.Set;
 
 import javax.validation.constraints.Min;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -14,7 +17,7 @@ import com.google.common.collect.Sets;
 @Service
 @Transactional(readOnly = true)
 @Validated
-public class UserService {
+public class UserService implements UserDetailsService {
 
 	private UserRepository repository;
 
@@ -29,5 +32,10 @@ public class UserService {
 
 	public Set<User> getAll() {
 		return Sets.newHashSet(repository.findAll());
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return repository.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User with username " + username + " does not exist"));
 	}
 }

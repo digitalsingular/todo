@@ -1,4 +1,4 @@
-package com.digitalsingular.todo;
+package com.digitalsingular.todo.configuration.web;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ConstraintViolationException;
