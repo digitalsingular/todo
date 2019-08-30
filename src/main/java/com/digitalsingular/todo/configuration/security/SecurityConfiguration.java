@@ -35,13 +35,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.cors().and().csrf().disable().authorizeRequests().anyRequest().authenticated().and()
-		.addFilter(new JWTAuthenticationFilter(authenticationManager(), objectMapper))
-		.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+				.addFilter(new JWTAuthenticationFilter(authenticationManager(), objectMapper))
+				.addFilter(new JWTAuthorizationFilter(authenticationManager())).sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder auth) throws Exception {
+		String encoded = passwordEncoder().encode("agustinventura");
+		encoded.length();
 		auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
 		auth.authenticationProvider(authenticationProvider());
 	}

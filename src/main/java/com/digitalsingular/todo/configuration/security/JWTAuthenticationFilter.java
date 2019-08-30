@@ -49,21 +49,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 			FilterChain filterChain, Authentication authentication) {
-		org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
-		List<String> roles = user.getAuthorities()
-				.stream()
-				.map(GrantedAuthority::getAuthority)
+		User user = (User) authentication.getPrincipal();
+		List<String> roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
 		byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
-		String token = Jwts.builder()
-				.signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
-				.setHeaderParam("typ", SecurityConstants.TOKEN_TYPE)
-				.setIssuer(SecurityConstants.TOKEN_ISSUER)
-				.setSubject(user.getUsername())
-				.setIssuedAt(new Date(System.currentTimeMillis()))
+		String token = Jwts.builder().signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
+				.setHeaderParam("typ", SecurityConstants.TOKEN_TYPE).setIssuer(SecurityConstants.TOKEN_ISSUER)
+				.setSubject(user.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-				.claim("roles", roles)
-				.compact();
+				.claim("roles", roles).compact();
 
 		response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
 	}
