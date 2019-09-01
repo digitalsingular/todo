@@ -40,9 +40,9 @@ public class TodoListService {
 
 	@Transactional(readOnly = false)
 	public TodoList add(@Valid TodoList todoList) {
-		for (User user: todoList.getUsers()) {
-			User dbUser = userService.get(user.getId()).orElseThrow(
-					() -> new EntityNotFoundException("User with id " + user.getId() + " was not found"));
+		for (User user : todoList.getUsers()) {
+			User dbUser = userService.get(user.getId())
+					.orElseThrow(() -> new EntityNotFoundException("User with id " + user.getId() + " was not found"));
 			todoList.addUser(dbUser);
 		}
 		return repository.save(todoList);
@@ -52,12 +52,16 @@ public class TodoListService {
 	public TodoList update(@Valid TodoList todoList) {
 		TodoList outdatedTodoList = repository.findById(todoList.getId()).orElseThrow(
 				() -> new EntityNotFoundException("TodoList with id " + todoList.getId() + " was not found"));
-		for (User user: todoList.getUsers()) {
-			User dbUser = userService.get(user.getId()).orElseThrow(
-					() -> new EntityNotFoundException("User with id " + user.getId() + " was not found"));
+		for (User user : todoList.getUsers()) {
+			User dbUser = userService.get(user.getId())
+					.orElseThrow(() -> new EntityNotFoundException("User with id " + user.getId() + " was not found"));
 			outdatedTodoList.addUser(dbUser);
 		}
 		return repository.save(outdatedTodoList);
+	}
+
+	public Set<TodoList> getByUserId(@Min(1) long userId) {
+		return Sets.newHashSet(repository.findByUsersId(userId));
 	}
 
 }

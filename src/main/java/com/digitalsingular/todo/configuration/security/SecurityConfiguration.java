@@ -19,7 +19,7 @@ import com.digitalsingular.todo.user.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	private ObjectMapper objectMapper;

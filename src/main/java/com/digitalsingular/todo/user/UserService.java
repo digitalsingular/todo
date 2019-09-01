@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -32,6 +33,10 @@ public class UserService implements UserDetailsService {
 
 	public Set<User> getAll() {
 		return Sets.newHashSet(repository.findAll());
+	}
+
+	public Optional<User> get(@NotBlank String login) {
+		return repository.findByLogin(login);
 	}
 
 	@Override
