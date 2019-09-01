@@ -32,12 +32,9 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws IOException, ServletException {
 		UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
-		if (authentication == null) {
-			filterChain.doFilter(request, response);
-			return;
+		if (authentication != null) {
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 		}
-
-		SecurityContextHolder.getContext().setAuthentication(authentication);
 		filterChain.doFilter(request, response);
 	}
 
@@ -47,11 +44,11 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 		if (!StringUtils.isEmpty(token) && token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
 			byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 			Jws<Claims> parsedToken = Jwts.parser().setSigningKey(signingKey)
-					.parseClaimsJws(token.replace("Bearer ", ""));
+					.parseClaimsJws(token.replace(SecurityConstants.TOKEN_PREFIX, ""));
 			String username = parsedToken.getBody().getSubject();
-			List<GrantedAuthority> authorities = ((Collection<String>) parsedToken.getBody().get("roles")).stream()
-					.map(authority -> new SimpleGrantedAuthority(authority))
-					.collect(Collectors.toList());
+			List<GrantedAuthority> authorities = ((Collection<String>) parsedToken.getBody()
+					.get(SecurityConstants.ROLES_CLAIMS)).stream()
+							.map(authority -> new SimpleGrantedAuthority(authority)).collect(Collectors.toList());
 			if (!StringUtils.isEmpty(username)) {
 				authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
 			}

@@ -32,11 +32,14 @@ public class TodoItem {
 	@JoinColumn(name = "list_id")
 	private TodoList list;
 
-	public TodoItem(String description) {
+	private TodoItem() {
 		super();
+	}
+
+	public TodoItem(String description) {
+		this();
 		if (StringUtils.isEmpty(description)) {
-			throw new IllegalArgumentException(
-					"No se puede crear un item sin descripcion");
+			throw new IllegalArgumentException("No se puede crear un item sin descripcion");
 		}
 		this.description = description;
 		status = ItemStatus.PENDING;

@@ -54,10 +54,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.collect(Collectors.toList());
 		byte[] signingKey = SecurityConstants.JWT_SECRET.getBytes();
 		String token = Jwts.builder().signWith(Keys.hmacShaKeyFor(signingKey), SignatureAlgorithm.HS512)
-				.setHeaderParam("typ", SecurityConstants.TOKEN_TYPE).setIssuer(SecurityConstants.TOKEN_ISSUER)
-				.setSubject(user.getUsername()).setIssuedAt(new Date(System.currentTimeMillis()))
+				.setHeaderParam(SecurityConstants.TOKEN_TYPE_HEADER, SecurityConstants.TOKEN_TYPE)
+				.setIssuer(SecurityConstants.TOKEN_ISSUER).setSubject(user.getUsername())
+				.setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
-				.claim("roles", roles).compact();
+				.claim(SecurityConstants.ROLES_CLAIMS, roles).compact();
 
 		response.addHeader(SecurityConstants.TOKEN_HEADER, SecurityConstants.TOKEN_PREFIX + token);
 	}
