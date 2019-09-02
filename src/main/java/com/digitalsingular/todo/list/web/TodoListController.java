@@ -23,6 +23,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.digitalsingular.todo.list.TodoList;
 import com.digitalsingular.todo.list.TodoListService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
+
 @RestController
 public class TodoListController {
 
@@ -33,6 +37,8 @@ public class TodoListController {
 		this.service = service;
 	}
 
+	@Operation(description = "get lists")
+	@SecurityRequirement(name = "bearerScheme")
 	@GetMapping("/lists")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Set<TodoList> getLists() {
