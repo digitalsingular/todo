@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+
 @ControllerAdvice
 public class RestExceptionHandler {
 
+	@ApiResponse(responseCode = "400", description = "Petición errónea")
 	@ExceptionHandler(value = { EntityNotFoundException.class })
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ResponseBody
@@ -20,6 +23,7 @@ public class RestExceptionHandler {
 		return ex.getMessage();
 	}
 
+	@ApiResponse(responseCode = "403", description = "Acceso prohibido")
 	@ExceptionHandler(value = { ConstraintViolationException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
@@ -27,6 +31,7 @@ public class RestExceptionHandler {
 		return ex.getMessage();
 	}
 
+	@ApiResponse(responseCode = "404", description = "No encontrado")
 	@ExceptionHandler(value = { AccessDeniedException.class })
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	@ResponseBody

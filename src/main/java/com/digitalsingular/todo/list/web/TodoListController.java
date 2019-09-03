@@ -24,6 +24,9 @@ import com.digitalsingular.todo.list.TodoList;
 import com.digitalsingular.todo.list.TodoListService;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 
 @RestController
@@ -36,7 +39,8 @@ public class TodoListController {
 		this.service = service;
 	}
 
-	@Operation(summary = "Devuelve todas las listas", description = "get lists")
+	@Operation(summary = "Devuelve todas las listas")
+	@ApiResponse(description = "Listas")
 	@GetMapping(path = "/lists", consumes = "application/json", produces = "application/json")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Set<TodoList> getLists() {
@@ -46,6 +50,11 @@ public class TodoListController {
 		}).collect(Collectors.toSet());
 	}
 
+	@Operation(summary = "Devuelve una lista", responses = {
+			@ApiResponse(responseCode = "200", description = "Lista solicitada")
+	}, parameters = {
+			@Parameter(description = "Identificador de la lista solicitada", allowEmptyValue = false, name = "id", required = true, in = ParameterIn.PATH)
+	})
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(path = "/lists/{id}", consumes = "application/json", produces = "application/json")
 	public TodoList getList(@Min(1) @PathVariable long id) {
@@ -55,6 +64,9 @@ public class TodoListController {
 		return list;
 	}
 
+	@Operation(summary = "Crea una lista", responses = {
+			@ApiResponse(responseCode = "201", description = "Lista creada")
+	}, requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Lista creada", required = true))
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping(path = "/lists", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<TodoList> addList(@RequestBody @Valid TodoList todoList, UriComponentsBuilder ucBuilder) {
@@ -65,6 +77,9 @@ public class TodoListController {
 		return new ResponseEntity<>(newList, headers, HttpStatus.CREATED);
 	}
 
+	@Operation(summary = "Modifica una lista", responses = {
+			@ApiResponse(responseCode = "200", description = "Lista modificada")
+	}, requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Lista modificada", required = true))
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping(path = "/lists", consumes = "application/json", produces = "application/json")
 	public TodoList updateList(@RequestBody @Valid TodoList todoList) {
@@ -73,6 +88,11 @@ public class TodoListController {
 		return updatedList;
 	}
 
+	@Operation(summary = "Devuelve las listas de un usuario", responses = {
+			@ApiResponse(responseCode = "200", description = "Listas del usuario solicitado")
+	}, parameters = {
+			@Parameter(description = "Identificador del usuario solicitado", allowEmptyValue = false, name = "userId", required = true, in = ParameterIn.PATH)
+	})
 	@PreAuthorize("hasRole('ROLE_ADMIN') || (@userService.get(principal).get().id == #userId)")
 	@GetMapping(path = "/users/{userId}/lists", consumes = "application/json", produces = "application/json")
 	public Set<TodoList> getUserLists(@Min(1) @PathVariable long userId, Principal principal) {

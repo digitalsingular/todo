@@ -21,6 +21,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.digitalsingular.todo.list.TodoList;
 import com.google.common.collect.Sets;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails {
@@ -139,31 +141,37 @@ public class User implements UserDetails {
 		return "User [id=" + id + ", login=" + login + ", email=" + email + ", role=" + role + "]";
 	}
 
+	@Hidden
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Sets.newHashSet(new SimpleGrantedAuthority("ROLE_" + role.name().toUpperCase()));
 	}
 
+	@Hidden
 	@Override
 	public String getUsername() {
 		return getLogin();
 	}
 
+	@Hidden
 	@Override
 	public boolean isAccountNonExpired() {
 		return true;
 	}
 
+	@Hidden
 	@Override
 	public boolean isAccountNonLocked() {
 		return true;
 	}
 
+	@Hidden
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return true;
 	}
 
+	@Hidden
 	@Override
 	public boolean isEnabled() {
 		return true;

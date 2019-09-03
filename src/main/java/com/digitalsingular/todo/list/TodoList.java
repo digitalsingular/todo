@@ -21,6 +21,8 @@ import com.digitalsingular.todo.user.User;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 @Entity
 @Table(name = "TODO_LISTS")
 public class TodoList {
@@ -32,6 +34,7 @@ public class TodoList {
 	@NotBlank
 	private String description;
 
+	@Hidden
 	@ManyToMany
 	@JoinTable(name = "USERS_TODO_LISTS",
 	joinColumns = @JoinColumn(name = "list_id", referencedColumnName = "id"),
