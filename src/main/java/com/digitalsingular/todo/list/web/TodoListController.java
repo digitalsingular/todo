@@ -24,7 +24,6 @@ import com.digitalsingular.todo.list.TodoList;
 import com.digitalsingular.todo.list.TodoListService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 
 @RestController
@@ -37,9 +36,8 @@ public class TodoListController {
 		this.service = service;
 	}
 
-	@Operation(description = "get lists")
-	@SecurityRequirement(name = "bearerScheme")
-	@GetMapping("/lists")
+	@Operation(summary = "Devuelve todas las listas", description = "get lists")
+	@GetMapping(path = "/lists", consumes = "application/json", produces = "application/json")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Set<TodoList> getLists() {
 		return service.getAll().stream().map(list -> {
@@ -49,7 +47,7 @@ public class TodoListController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/lists/{id}")
+	@GetMapping(path = "/lists/{id}", consumes = "application/json", produces = "application/json")
 	public TodoList getList(@Min(1) @PathVariable long id) {
 		TodoList list = service.get(id).orElseThrow(
 				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No existe una lista con id " + id));
@@ -58,7 +56,7 @@ public class TodoListController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PostMapping("/lists")
+	@PostMapping(path = "/lists", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<TodoList> addList(@RequestBody @Valid TodoList todoList, UriComponentsBuilder ucBuilder) {
 		TodoList newList = service.add(todoList);
 		newList.getUsers().clear();
@@ -68,7 +66,7 @@ public class TodoListController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PutMapping("/lists")
+	@PutMapping(path = "/lists", consumes = "application/json", produces = "application/json")
 	public TodoList updateList(@RequestBody @Valid TodoList todoList) {
 		TodoList updatedList = service.update(todoList);
 		updatedList.getUsers().clear();
@@ -76,7 +74,7 @@ public class TodoListController {
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN') || (@userService.get(principal).get().id == #userId)")
-	@GetMapping("/users/{userId}/lists")
+	@GetMapping(path = "/users/{userId}/lists", consumes = "application/json", produces = "application/json")
 	public Set<TodoList> getUserLists(@Min(1) @PathVariable long userId, Principal principal) {
 		return service.getByUserId(userId).stream().map(list -> {
 			list.getUsers().clear();
